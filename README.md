@@ -2,6 +2,8 @@
 
 Project for University | Projeto para Universidade Metrocamp
 
+- Hospedado no Firebase
+
 - Empresa do ramo alimentício | Empório Café
 
 - Gerador de CEP feito com Jquery e Json. Código no "head" da pagina.
