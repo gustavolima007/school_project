@@ -20,6 +20,79 @@
     <link rel="stylesheet" href="assets/theme/css/style.css">
     <link rel="stylesheet" href="assets/mobirise/css/mbr-additional.css" type="text/css">
 
+
+    <!-- Adicionando JQuery -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous"></script>
+
+    <!-- Adicionando Javascript -->
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            function limpa_formulário_cep() {
+                // Limpa valores do formulário de cep.
+                $("#rua").val("");
+                $("#bairro").val("");
+                $("#cidade").val("");
+                $("#uf").val("");
+                $("#ibge").val("");
+            }
+
+            //Quando o campo cep perde o foco.
+            $("#cep").blur(function () {
+
+                //Nova variável "cep" somente com dígitos.
+                var cep = $(this).val().replace(/\D/g, '');
+
+                //Verifica se campo cep possui valor informado.
+                if (cep != "") {
+
+                    //Expressão regular para validar o CEP.
+                    var validacep = /^[0-9]{8}$/;
+
+                    //Valida o formato do CEP.
+                    if (validacep.test(cep)) {
+
+                        //Preenche os campos com "..." enquanto consulta webservice.
+                        $("#rua").val("...");
+                        $("#bairro").val("...");
+                        $("#cidade").val("...");
+                        $("#uf").val("...");
+                        $("#ibge").val("...");
+
+                        //Consulta o webservice viacep.com.br/
+                        $.getJSON("https://viacep.com.br/ws/" + cep + "/json/?callback=?", function (dados) {
+
+                            if (!("erro" in dados)) {
+                                //Atualiza os campos com os valores da consulta.
+                                $("#rua").val(dados.logradouro);
+                                $("#bairro").val(dados.bairro);
+                                $("#cidade").val(dados.localidade);
+                                $("#uf").val(dados.uf);
+                                $("#ibge").val(dados.ibge);
+                            } //end if.
+                            else {
+                                //CEP pesquisado não foi encontrado.
+                                limpa_formulário_cep();
+                                alert("CEP não encontrado.");
+                            }
+                        });
+                    } //end if.
+                    else {
+                        //cep é inválido.
+                        limpa_formulário_cep();
+                        alert("Formato de CEP inválido.");
+                    }
+                } //end if.
+                else {
+                    //cep sem valor, limpa formulário.
+                    limpa_formulário_cep();
+                }
+            });
+        });
+    </script>
+
 </head>
 
 <body>
@@ -285,10 +358,10 @@
                             Contato
                         </h3>
                         <p class="contacts-block mbr-fonts-style align-center mbr-text display-4">
-                                <a class="icon-transition" href="https://www.linkedin.com/in/gustavo-lima-8b1399104"
-                                target="_blank">
+                            <a class="icon-transition" href="https://www.linkedin.com/in/gustavo-lima-8b1399104" target="_blank">
                                 <span class="mbr-iconfont mbr-black socicon-linkedin socicon"></span>
-                            </a> | Gustavo Lima - adm.gustavo.lima@gmail.com<br>Christina - chris_o_f@hotmail.com<br>Admin -
+                            </a> | Gustavo Lima - adm.gustavo.lima@gmail.com<br>Christina - chris_o_f@hotmail.com<br>Admin
+                            -
                             henrique_astolfo@yahoo.com.br<br>Paulo - paulovieira.hap@outlook.com
                         </p>
                     </div>
@@ -316,29 +389,37 @@
 
 
                 <div class="form-1 col-sm-12 col-md-5 col-xl-4 col-lg-3" data-form-type="formoid">
-                    <h3 class="form-title pb-3 mbr-fonts-style align-center display-5">
-                        GET IN TOUCH
-                    </h3>
-                    <div data-form-alert="" hidden="">Thanks for filling out the form!</div>
-                    <form class="mbr-form" action="https://mobirise.com/" method="post" data-form-title="My Mobirise Form"><input
-                            type="hidden" name="email" data-form-email="true" value="aOd2rfCaRO2dcRbdygkdMgITMWBOsRm6K4w0ItsK1hFsHf05AHpZ3kaRxIGrodnjwJsvLExEgHCWq4UxSk6WckvJmCJCJm4XRqqzdU4JC+dnovHFq3zPRDR1tgey1DwM"
-                            data-form-field="E-mail">
-                        <div class="input-wrap" data-for="name">
-                            <input type="text" class="field display-7" name="name" placeholder="Name" data-form-field="Name"
-                                required="" id="name-footer4-f">
+                   
+                    <form method="get" action=".">
+                            <h3 class="form-title pb-3 mbr-fonts-style align-center display-5">
+                                    CAFÉ DELIVERY
+                                </h3>
+                        <div class="form-group pb-2" data-for="Cep">
+                            <textarea name="cep" type="text" id="cep" value="" size="10" maxlength="9" class="form-control display-7"
+                                placeholder="Cep" rows="2" data-form-field="Cep" id="message-footer4-f"></textarea>
                         </div>
 
-                        <div class="input-wrap" data-for="phone">
-                            <input type="text" class="field display-7" name="phone" placeholder="Phone" data-form-field="Phone"
-                                id="phone-footer4-f">
+
+                        <div class="input-wrap" data-for="Rua">
+                            <input name="rua" type="text" id="rua" size="60" class="field display-7" placeholder="Rua"
+                                data-form-field="Rua" required="" id="name-footer4-f">
                         </div>
-                        <div class="form-group pb-2" data-for="message">
-                            <textarea type="text" class="form-control display-7" name="message" placeholder="Message"
-                                rows="2" data-form-field="Message" id="message-footer4-f"></textarea>
+
+                        <div class="input-wrap" data-for="Bairro">
+                            <input name="Bairro" type="text" id="bairro" size="40" class="field display-7" placeholder="Bairro"
+                                data-form-field="Bairro" required="" id="name-footer4-f">
                         </div>
-                        <div class="btn-row align-center">
-                            <span class="input-group-btn"><button href="https://mobirise.com/" type="submit" class="btn btn-form btn-info display-4">Send</button></span>
+
+                        <div class="input-wrap" data-for="Cidade">
+                            <input name="Cidade" type="text" id="cidade" size="40" size="60" class="field display-7"
+                                placeholder="Cidade" data-form-field="Cidade" required="" id="name-footer4-f">
                         </div>
+
+                        <div class="input-wrap" data-for="Estado">
+                            <input name="uf" type="text" id="uf" size="2" class="field display-7" placeholder="Estado"
+                                data-form-field="Estado" required="" id="name-footer4-f">
+                        </div>
+
                     </form>
                 </div>
             </div>
